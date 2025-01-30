@@ -1,5 +1,6 @@
 package com.jetbrains.kmpapp.screens.home
 
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Notifications
@@ -12,6 +13,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -21,6 +23,7 @@ import com.jetbrains.kmpapp.components.AppNavigationBar
 import com.jetbrains.kmpapp.components.AppScreenScaffold
 import com.jetbrains.kmpapp.components.AppToolbar
 import com.jetbrains.kmpapp.components.BottomBarDestination
+import com.jetbrains.kmpapp.screens.EmptyScreenContent
 import com.jetbrains.kmpapp.theme.BeeShopTheme
 import kmp_app_template.composeapp.generated.resources.Res
 import kmp_app_template.composeapp.generated.resources.label_medium
@@ -78,12 +81,21 @@ fun HomeScreen(rootNavController: NavHostController) {
                         "setting" -> {
                             navController.navigate(SettingDestination)
                         }
+
+                        "notification" -> {
+                            navController.navigate(NotificationDestination)
+                        }
+
+                        "category" -> {
+                            navController.navigate(CategoryDestination)
+                        }
                     }
 
                 }, listItems = navItems, selected = title)
             },
-        ) {
+        ) { paddingValues ->
             HomeNavHost(
+                modifier = Modifier.padding(paddingValues),
                 navController = navController,
                 rootNavController = rootNavController,
             )
@@ -100,12 +112,20 @@ object SettingDestination
 @Serializable
 object ReelsTabScreenDestination
 
+@Serializable
+object NotificationDestination
+
+@Serializable
+object CategoryDestination
+
 @Composable
 fun HomeNavHost(
+    modifier: Modifier = Modifier,
     navController: NavHostController,
     rootNavController: NavHostController,
 ) {
     NavHost(
+        modifier = modifier,
         navController = navController,
         startDestination = DashboardDestination
     ) {
@@ -121,6 +141,14 @@ fun HomeNavHost(
         }
         composable<SettingDestination> {
             SettingTabScreen()
+        }
+
+        composable<NotificationDestination> {
+            EmptyScreenContent()
+        }
+
+        composable<CategoryDestination> {
+            EmptyScreenContent()
         }
     }
 }

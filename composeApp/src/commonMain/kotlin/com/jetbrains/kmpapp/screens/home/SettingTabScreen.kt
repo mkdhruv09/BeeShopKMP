@@ -64,7 +64,6 @@ fun SettingTabScreen() {
         }
         Column(
             modifier = Modifier
-                .safeContentPadding()
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {

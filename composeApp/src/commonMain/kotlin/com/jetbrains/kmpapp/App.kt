@@ -12,6 +12,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.jetbrains.kmpapp.screens.auth.LoginScreen
+import com.jetbrains.kmpapp.screens.checkout.CartScreen
 import com.jetbrains.kmpapp.screens.detail.DetailScreen
 import com.jetbrains.kmpapp.screens.home.HomeScreen
 import com.jetbrains.kmpapp.screens.product.ProductDetailScreen
@@ -26,6 +27,9 @@ object HomeScreenTabDestination
 
 @Serializable
 object ProductDetailDestination
+
+@Serializable
+object CartDestination
 
 
 @Serializable
@@ -52,6 +56,14 @@ fun App() {
 
                 composable<ProductDetailDestination> {
                     ProductDetailScreen(productId = "", navigateBack = {
+                        onBackPress()
+                    }, onCartRedirect = {
+                        navController.navigate(CartDestination)
+                    })
+                }
+
+                composable<CartDestination> {
+                    CartScreen(onBack = {
                         onBackPress()
                     })
                 }

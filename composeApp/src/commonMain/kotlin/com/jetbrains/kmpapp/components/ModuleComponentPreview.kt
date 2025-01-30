@@ -8,7 +8,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.airbnb.android.showkase.annotation.ShowkaseComposable
-import com.beeshop.app.ui.module.checkout.CartProduct
+import com.jetbrains.kmpapp.screens.checkout.CartProduct
 import com.jetbrains.kmpapp.screens.home.HomeCategoryList
 import com.jetbrains.kmpapp.screens.home.HomeCategoryWidget
 import com.jetbrains.kmpapp.screens.home.HomeProduct

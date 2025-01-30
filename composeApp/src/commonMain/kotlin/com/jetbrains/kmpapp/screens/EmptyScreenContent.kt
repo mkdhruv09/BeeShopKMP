@@ -1,6 +1,7 @@
 package com.jetbrains.kmpapp.screens
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -15,9 +16,12 @@ fun EmptyScreenContent(
     modifier: Modifier = Modifier,
 ) {
     Box(
-        modifier = modifier,
+        modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.Center,
     ) {
-        Text(stringResource(Res.string.no_data_available))
+        Text(
+            stringResource(Res.string.no_data_available),
+            modifier = Modifier.align(Alignment.Center)
+        )
     }
 }

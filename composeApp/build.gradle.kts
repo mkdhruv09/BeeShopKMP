@@ -45,6 +45,7 @@ kotlin {
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
             implementation(libs.lifecycle.viewmodel.compose)
+            //implementation(libs.androidx.constraintlayout)
 
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.content.negotiation)

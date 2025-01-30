@@ -83,6 +83,7 @@ import kotlin.math.absoluteValue
 @Composable
 fun ProductDetailScreen(
     productId: String = "",
+    onCartRedirect: () -> Unit={},
     navigateBack: () -> Unit = {},
 ) {
     val screenModel = koinViewModel<ProductDetailScreenViewModel>()
@@ -102,7 +103,8 @@ fun ProductDetailScreen(
                     ProductDetailShimmer()
                 } else {
                     ProductDetail(
-                        detail.product!!
+                       product =  detail.product!!,
+                        onCartRedirect = onCartRedirect
                     )
                 }
             }
@@ -114,7 +116,8 @@ fun ProductDetailScreen(
 }
 
 @Composable
-private fun ProductDetail(product: Product) {
+private fun ProductDetail(product: Product,
+                          onCartRedirect:()->Unit={}) {
     Box(modifier = Modifier.fillMaxSize()) {
         Column {
             val coroutineScope = rememberCoroutineScope()
@@ -159,6 +162,7 @@ private fun ProductDetail(product: Product) {
                 .align(Alignment.BottomCenter)
                 .padding(12.dp),
             onClick = {
+                onCartRedirect()
                 //navigator.navigate(CartScreenDestination)
             }
         )
