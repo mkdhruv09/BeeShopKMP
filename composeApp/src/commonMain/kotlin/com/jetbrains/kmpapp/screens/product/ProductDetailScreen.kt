@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
@@ -35,7 +34,6 @@ import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -69,7 +67,7 @@ import com.jetbrains.kmpapp.components.ChipViews
 import com.jetbrains.kmpapp.components.GlideImage
 import com.jetbrains.kmpapp.components.RatingBar
 import com.jetbrains.kmpapp.components.SCREEN_PADDING
-import com.jetbrains.kmpapp.components.SmallDividerLight
+import com.jetbrains.kmpapp.components.SmallDivider
 import com.jetbrains.kmpapp.components.roundedBordered
 import com.jetbrains.kmpapp.components.roundedUnBordered
 import com.jetbrains.kmpapp.data.model.Product
@@ -83,7 +81,7 @@ import kotlin.math.absoluteValue
 @Composable
 fun ProductDetailScreen(
     productId: String = "",
-    onCartRedirect: () -> Unit={},
+    onCartRedirect: () -> Unit = {},
     navigateBack: () -> Unit = {},
 ) {
     val screenModel = koinViewModel<ProductDetailScreenViewModel>()
@@ -103,7 +101,7 @@ fun ProductDetailScreen(
                     ProductDetailShimmer()
                 } else {
                     ProductDetail(
-                       product =  detail.product!!,
+                        product = detail.product!!,
                         onCartRedirect = onCartRedirect
                     )
                 }
@@ -116,8 +114,10 @@ fun ProductDetailScreen(
 }
 
 @Composable
-private fun ProductDetail(product: Product,
-                          onCartRedirect:()->Unit={}) {
+private fun ProductDetail(
+    product: Product,
+    onCartRedirect: () -> Unit = {}
+) {
     Box(modifier = Modifier.fillMaxSize()) {
         Column {
             val coroutineScope = rememberCoroutineScope()
@@ -220,7 +220,7 @@ private fun ProductInformation(
         }
         Spacer(modifier = Modifier.height(5.dp))
 
-        SmallDividerLight(modifier.padding(vertical = 5.dp))
+        SmallDivider(modifier.padding(vertical = 5.dp), isLight = true)
 
         //Variant Section
         Column(modifier = Modifier.padding(horizontal = SCREEN_PADDING)) {
@@ -230,7 +230,7 @@ private fun ProductInformation(
             ProductSizeVariant()
             Spacer(modifier = Modifier.height(SCREEN_PADDING))
         }
-        SmallDividerLight(modifier.padding(vertical = 5.dp))
+        SmallDivider(modifier.padding(vertical = 5.dp), isLight = true)
 
         //Description Section
         Column(modifier = Modifier.padding(SCREEN_PADDING)) {

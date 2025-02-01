@@ -17,10 +17,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
@@ -63,12 +61,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import coil3.compose.AsyncImage
 import com.jetbrains.kmpapp.theme.BeeShopTheme
-import org.jetbrains.compose.resources.DrawableResource
-import org.jetbrains.compose.resources.painterResource
 import kotlin.math.ceil
 import kotlin.math.floor
 
@@ -372,24 +366,24 @@ fun AppTextField(
 }
 
 @Composable
-fun SmallDivider(modifier: Modifier = Modifier) {
+fun SmallDivider(
+    modifier: Modifier = Modifier,
+    isLight: Boolean = false
+) {
     Spacer(
         modifier = modifier
             .fillMaxWidth()
             .height(BORDER_WIDTH)
-            .background(color = MaterialTheme.colorScheme.onPrimary)
+            .background(
+                color = if (isLight) {
+                    MaterialTheme.colorScheme.onPrimary.copy(0.5f)
+                } else {
+                    MaterialTheme.colorScheme.onPrimary
+                }
+            )
     )
 }
 
-@Composable
-fun SmallDividerLight(modifier: Modifier = Modifier) {
-    Spacer(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(BORDER_WIDTH)
-            .background(color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.5f))
-    )
-}
 
 @Composable
 fun ListHeader(title: String = "Header", showViewAll: Boolean = true) {
@@ -536,7 +530,7 @@ fun AppDialogContent(
                     fontSize = 20.sp,
                     color = MaterialTheme.colorScheme.onPrimary
                 )
-                SmallDividerLight()
+                SmallDivider(isLight = true)
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier.padding(20.dp)

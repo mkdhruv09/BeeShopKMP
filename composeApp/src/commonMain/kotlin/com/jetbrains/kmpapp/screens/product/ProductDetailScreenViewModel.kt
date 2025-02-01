@@ -2,17 +2,15 @@ package com.jetbrains.kmpapp.screens.product
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jetbrains.kmpapp.data.MuseumRepository
 import com.jetbrains.kmpapp.data.model.Product
 import com.jetbrains.kmpapp.data.model.ProductResponse
-import io.ktor.client.*
-import io.ktor.client.call.*
-import io.ktor.client.plugins.contentnegotiation.*
-import io.ktor.client.request.*
-import io.ktor.http.*
-import io.ktor.serialization.kotlinx.json.*
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.request.get
+import io.ktor.http.ContentType
+import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -34,7 +32,7 @@ class ProductDetailScreenViewModel : ViewModel() {
 
     fun getDetail(id:String) {
         if (detailSharedFlow.value.product == null) {
-            viewModelScope.launch(Dispatchers.IO) {
+            viewModelScope.launch(Dispatchers.Default) {
                 detailSharedFlow.update { state -> state.copy(showLoading = true) }
                 val response = getProductDetail()
                 detailSharedFlow.update { state ->

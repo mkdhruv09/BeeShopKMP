@@ -7,6 +7,9 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.FlowRowOverflow
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -208,34 +211,33 @@ fun HomeProductHorizontal(title: String = "", onProductClick: () -> Unit = {}) {
 }
 
 //@ShowkaseComposable("HomeProductsVertical", group = "HomeWidgets")
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun HomeProductVertical(onProductClick: () -> Unit = {}) {
     Column(modifier = Modifier.fillMaxWidth()) {
         ListHeader("Popular Products")
-        Column(
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+        FlowRow(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(12.dp)
+                .padding(12.dp),
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
+            verticalArrangement=Arrangement.spacedBy(10.dp),
+            maxItemsInEachRow = 8,
+            overflow = FlowRowOverflow.Visible
         ) {
-            for (i in 1..3) {
-                Row(modifier = Modifier.fillMaxWidth()) {
-                    HomeProduct(
-                        url = Product.SAMPLE_IMAGE,
-                        modifier = Modifier.weight(1f),
-                        onProductClick = onProductClick
-                    )
-                    Spacer(modifier = Modifier.size(12.dp))
-                    HomeProduct(
-                        url = Product.SAMPLE_IMAGE,
-                        modifier = Modifier.weight(1f),
-                        onProductClick = onProductClick
-                    )
-                }
+            repeat(10) {
+                HomeProduct(
+                    url = Product.SAMPLE_IMAGE,
+                    modifier = Modifier
+                        .height(100.dp)
+                        .width(200.dp),
+                    onProductClick = onProductClick
+                )
             }
         }
     }
 }
+
 
 //@ShowkaseComposable("HomeProduct", group = "HomeWidgets")
 @Composable
