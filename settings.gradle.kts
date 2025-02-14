@@ -31,3 +31,7 @@ dependencyResolutionManagement {
 }
 
 include(":composeApp")
+/*include(":MyLibrary")
+project(":MyLibrary").projectDir = File("/Users/krupal/AndroidStudioProjects/TestKMPAndroidImport")*/
+
+

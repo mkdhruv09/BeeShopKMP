@@ -6,7 +6,9 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ContextualFlowRow
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.FlowRowOverflow
@@ -21,6 +23,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -44,6 +47,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil3.compose.rememberAsyncImagePainter
 import com.jetbrains.kmpapp.components.AppScreenScaffold
 import com.jetbrains.kmpapp.components.BORDER_WIDTH
 import com.jetbrains.kmpapp.components.GlideImage
@@ -216,23 +220,27 @@ fun HomeProductHorizontal(title: String = "", onProductClick: () -> Unit = {}) {
 fun HomeProductVertical(onProductClick: () -> Unit = {}) {
     Column(modifier = Modifier.fillMaxWidth()) {
         ListHeader("Popular Products")
+
+        val rows = 2
+        val columns = 3
         FlowRow(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(12.dp),
+            modifier = Modifier.padding(4.dp),
             horizontalArrangement = Arrangement.spacedBy(4.dp),
-            verticalArrangement=Arrangement.spacedBy(10.dp),
-            maxItemsInEachRow = 8,
-            overflow = FlowRowOverflow.Visible
+            maxItemsInEachRow = rows
         ) {
-            repeat(10) {
-                HomeProduct(
-                    url = Product.SAMPLE_IMAGE,
-                    modifier = Modifier
-                        .height(100.dp)
-                        .width(200.dp),
-                    onProductClick = onProductClick
-                )
+            val itemModifier = Modifier
+                .padding(4.dp)
+                .weight(1f)
+                .aspectRatio(1f)
+                .clip(RoundedCornerShape(8.dp))
+                .background(Color.Black)
+            repeat(rows * columns) {
+                Box(modifier = itemModifier) {
+                    HomeProduct(
+                        url = Product.SAMPLE_IMAGE,
+                        modifier = Modifier.matchParentSize()
+                    )
+                }
             }
         }
     }
@@ -241,16 +249,17 @@ fun HomeProductVertical(onProductClick: () -> Unit = {}) {
 
 //@ShowkaseComposable("HomeProduct", group = "HomeWidgets")
 @Composable
-fun HomeProduct(url: String = "", modifier: Modifier = Modifier, onProductClick: () -> Unit = {}) {
+fun HomeProduct(
+    url: String = "",
+    modifier: Modifier = Modifier,
+    onProductClick: () -> Unit = {}
+) {
     Column(
         modifier = modifier
-            .width(intrinsicSize = IntrinsicSize.Min)
             .clickable { onProductClick() })
     {
         Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .aspectRatio(1f)
                 .border(
                     width = BORDER_WIDTH,
                     color = MaterialTheme.colorScheme.onPrimary,

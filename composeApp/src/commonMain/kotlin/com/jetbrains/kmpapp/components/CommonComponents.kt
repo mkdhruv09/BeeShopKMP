@@ -1,6 +1,7 @@
 package com.jetbrains.kmpapp.components
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -62,6 +63,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import coil3.compose.AsyncImage
+import coil3.compose.rememberAsyncImagePainter
 import com.jetbrains.kmpapp.theme.BeeShopTheme
 import kotlin.math.ceil
 import kotlin.math.floor
@@ -626,9 +628,9 @@ fun GlideImage(
 ) {
     AsyncImage(
         model = model,
-        contentDescription = null,
+        contentDescription = "null",
         modifier = modifier,
-        contentScale = contentScale
+        contentScale = contentScale,
     )
 }
 
