@@ -35,3 +35,7 @@ include(":composeApp")
 project(":MyLibrary").projectDir = File("/Users/krupal/AndroidStudioProjects/TestKMPAndroidImport")*/
 
 
+/*include(":MyLibrary")
+project(":MyLibrary").projectDir = File("/Users/krupal/AndroidStudioProjects/TestKMPAndroidImport")*/
+
+
