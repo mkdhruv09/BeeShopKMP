@@ -229,9 +229,7 @@ fun HomeProductVertical(onProductClick: () -> Unit = {}) {
             maxItemsInEachRow = rows
         ) {
             val itemModifier = Modifier
-                .padding(4.dp)
-                .weight(1f)
-                .aspectRatio(1f)
+                .size(100.dp)
                 .clip(RoundedCornerShape(8.dp))
                 .background(Color.Black)
             repeat(rows * columns) {
