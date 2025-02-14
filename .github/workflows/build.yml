@@ -24,14 +24,12 @@ jobs:
           java-version: 19
 
       - name: Build Project
-        run: ./gradlew wasmJsBrowserProductionWebpack
-      - name: Build Project
-        run: ./gradlew wasmJsBrowserProductionExecutableDistributeResources
+        run: ./gradlew wasmJsBrowserDistribution
 
       - name: Copy Production Executable to Docs
         run: |
           mkdir -p ./docs
-          cp -R ./webApp/build/dist/wasmJs/productionExecutable/* ./docs/
+          cp -R ./composeApp/build/dist/wasmJs/productionExecutable/* ./docs/
 
       - name: Commit results
         run: |
