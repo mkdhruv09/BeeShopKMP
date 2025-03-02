@@ -19,25 +19,29 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jetbrains.kmpapp.components.AppButton
 import com.jetbrains.kmpapp.components.AppScreenScaffold
 import com.jetbrains.kmpapp.components.AppTextField
+import kmp_app_template.composeapp.generated.resources.Res
+import kmp_app_template.composeapp.generated.resources.app_logo
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 
 @Composable
 @Preview
-fun LoginScreen() {
-    AppScreenScaffold { paddingValues ->
+fun LoginScreen(onValidateLogin: () -> Unit = {}) {
+    AppScreenScaffold(containerColor = Color.Yellow) { paddingValues ->
         var emailText by remember {
             mutableStateOf("")
         }
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Spacer(modifier = Modifier.weight(0.1f))
+            Spacer(modifier = Modifier.height(50.dp))
             Icon(
-                Icons.Filled.Done,
+                painter = painterResource(Res.drawable.app_logo),
                 contentDescription = "beeshop",
                 tint = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier.size(150.dp)
@@ -63,7 +67,6 @@ fun LoginScreen() {
                     .fillMaxWidth()
             )
             Spacer(modifier = Modifier.weight(1f))
-            Text("asda")
             Text(
                 text = "By continuing i'm agree to Beeshop's",
                 style = MaterialTheme.typography.bodyMedium,
@@ -89,7 +92,7 @@ fun LoginScreen() {
                     .fillMaxWidth(),
                 text = "Login"
             ) {
-
+                onValidateLogin()
             }
         }
     }

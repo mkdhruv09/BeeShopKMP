@@ -45,7 +45,8 @@ import kotlinx.coroutines.launch
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-fun CartScreen(onBack: () -> Unit = {}) {
+fun CartScreen(onBack: () -> Unit = {},
+               onNavigatePayment:()->Unit={}) {
     BeeShopTheme {
         AppScreenScaffold(containerColor = Color.White, topBar = {
             Column {
@@ -92,7 +93,7 @@ fun CartScreen(onBack: () -> Unit = {}) {
                 CartPlaceOrder(
                     modifier = Modifier.align(Alignment.BottomCenter),
                     onPlaceOrder = {
-                        //navigator.navigate(PaymentSuccessScreenDestination)
+                        onNavigatePayment()
                     })
             }
         }

@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import com.jetbrains.kmpapp.data.MuseumObject
-import com.jetbrains.kmpapp.screens.EmptyScreenContent
+import com.jetbrains.kmpapp.screens.empty.EmptyScreenContent
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable

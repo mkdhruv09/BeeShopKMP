@@ -1,5 +1,6 @@
 package com.jetbrains.kmpapp.screens.product
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -18,8 +19,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
@@ -30,6 +33,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
@@ -58,6 +62,8 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.lerp
+import com.jetbrains.kmpapp.bridge.ShareManager
+import com.jetbrains.kmpapp.bridge.rememberShareManager
 import com.jetbrains.kmpapp.components.AppButton
 import com.jetbrains.kmpapp.components.AppScreenScaffold
 import com.jetbrains.kmpapp.components.AppToolbar
@@ -73,7 +79,10 @@ import com.jetbrains.kmpapp.components.roundedUnBordered
 import com.jetbrains.kmpapp.data.model.Product
 import com.jetbrains.kmpapp.data.model.ProductMedia
 import com.jetbrains.kmpapp.theme.BeeShopTheme
+import kmp_app_template.composeapp.generated.resources.Res
+import kmp_app_template.composeapp.generated.resources.product_detail
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 import kotlin.math.absoluteValue
@@ -91,9 +100,12 @@ fun ProductDetailScreen(
         AppScreenScaffold(
             modifier = Modifier, containerColor = Color.White, topBar = {
                 AppToolbar(
-                    title = detail.product?.title ?: "",
+                    title = stringResource(Res.string.product_detail),
                     showBack = true,
-                    onBackPress = navigateBack
+                    onBackPress = navigateBack,
+                    endWidget = {
+                        ShareProduct()
+                    }
                 )
             }) { paddingValues ->
             Column(modifier = Modifier.padding(paddingValues)) {
@@ -111,6 +123,17 @@ fun ProductDetailScreen(
     LaunchedEffect(key1 = Unit) {
         screenModel.getDetail(id = productId)
     }
+}
+
+@Composable
+fun ShareProduct() {
+    val shareManager = rememberShareManager()
+    Icon(imageVector = Icons.Filled.Share,
+        contentDescription = "share",
+        tint = Color.Black,
+        modifier = Modifier.padding(8.dp).clickable {
+            shareManager.shareText("Hello World")
+        })
 }
 
 @Composable

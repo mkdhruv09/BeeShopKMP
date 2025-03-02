@@ -21,7 +21,7 @@ import com.jetbrains.kmpapp.components.SCREEN_PADDING
 import com.jetbrains.kmpapp.theme.BeeShopTheme
 
 @Composable
-fun PaymentSuccessScreen() {
+fun PaymentSuccessScreen(onHomeRedirect: () -> Unit = {}) {
     BeeShopTheme {
         AppScreenScaffold(topBar = {
             AppToolbar(title = "Payment Success")
@@ -50,7 +50,7 @@ fun PaymentSuccessScreen() {
                         .align(Alignment.BottomCenter)
                         .padding(SCREEN_PADDING),
                     onClick = {
-                        //destinationsNavigator.popBackStack(HomeScreenDestination.route, false)
+                        onHomeRedirect()
                     })
             }
         }

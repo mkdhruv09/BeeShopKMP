@@ -2,9 +2,9 @@ package com.jetbrains.kmpapp.screens.home
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.Place
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.MaterialTheme
@@ -23,12 +23,11 @@ import com.jetbrains.kmpapp.components.AppNavigationBar
 import com.jetbrains.kmpapp.components.AppScreenScaffold
 import com.jetbrains.kmpapp.components.AppToolbar
 import com.jetbrains.kmpapp.components.BottomBarDestination
-import com.jetbrains.kmpapp.screens.EmptyScreenContent
+import com.jetbrains.kmpapp.screens.empty.EmptyScreenContent
+import com.jetbrains.kmpapp.screens.category.ProductsTabScreen
 import com.jetbrains.kmpapp.theme.BeeShopTheme
-import kmp_app_template.composeapp.generated.resources.Res
-import kmp_app_template.composeapp.generated.resources.label_medium
+import io.github.aakira.napier.Napier
 import kotlinx.serialization.Serializable
-import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 
@@ -37,17 +36,24 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun HomeScreen(rootNavController: NavHostController) {
     BeeShopTheme {
         val navController = rememberNavController()
-        val appName = stringResource(Res.string.label_medium)
         var title by remember {
             mutableStateOf("home")
         }
         val navItems =
             listOf(
-                BottomBarDestination(title = "Home", icon = Icons.Filled.Home, key = "home"),
-                BottomBarDestination(title = "Reels", icon = Icons.Filled.PlayArrow, key = "reels"),
+                BottomBarDestination(
+                    title = "Home",
+                    icon = Icons.Filled.Home,
+                    key = "home",
+                ),
+                BottomBarDestination(
+                    title = "Reels",
+                    icon = Icons.Filled.PlayArrow,
+                    key = "reels"
+                ),
                 BottomBarDestination(
                     title = "Category",
-                    icon = Icons.Filled.Place,
+                    icon = Icons.Filled.Face,
                     key = "category"
                 ),
                 BottomBarDestination(
@@ -118,6 +124,7 @@ object NotificationDestination
 @Serializable
 object CategoryDestination
 
+
 @Composable
 fun HomeNavHost(
     modifier: Modifier = Modifier,
@@ -131,6 +138,7 @@ fun HomeNavHost(
     ) {
         composable<DashboardDestination> {
             DashboardTabScreen(onProductDetail = {
+                Napier.d(message = "OnClick")
                 rootNavController.navigate(ProductDetailDestination)
             }, onReelsClick = {
                 navController.navigate(ReelsTabScreenDestination)
@@ -148,7 +156,7 @@ fun HomeNavHost(
         }
 
         composable<CategoryDestination> {
-            EmptyScreenContent()
+            ProductsTabScreen()
         }
     }
 }

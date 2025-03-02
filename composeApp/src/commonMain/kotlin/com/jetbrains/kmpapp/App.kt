@@ -10,16 +10,19 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.toRoute
 import com.jetbrains.kmpapp.screens.auth.LoginScreen
+import com.jetbrains.kmpapp.screens.auth.OtpVerificationScreen
 import com.jetbrains.kmpapp.screens.checkout.CartScreen
-import com.jetbrains.kmpapp.screens.detail.DetailScreen
+import com.jetbrains.kmpapp.screens.checkout.PaymentSuccessScreen
 import com.jetbrains.kmpapp.screens.home.HomeScreen
 import com.jetbrains.kmpapp.screens.product.ProductDetailScreen
 import kotlinx.serialization.Serializable
 
 @Serializable
 object LoginDestination
+
+@Serializable
+object OtpVerificationDestination
 
 @Serializable
 object HomeScreenTabDestination
@@ -31,9 +34,9 @@ object ProductDetailDestination
 @Serializable
 object CartDestination
 
-
 @Serializable
-data class DetailDestination(val objectId: Int)
+object PaymentDestination
+
 
 @Composable
 fun App() {
@@ -46,9 +49,17 @@ fun App() {
             fun onBackPress() {
                 navController.navigateUp()
             }
-            NavHost(navController = navController, startDestination = HomeScreenTabDestination) {
+            NavHost(navController = navController, startDestination = LoginDestination) {
+
                 composable<LoginDestination> {
-                    LoginScreen()
+                    LoginScreen(onValidateLogin = {
+                        navController.navigate(OtpVerificationDestination)
+                    })
+                }
+                composable<OtpVerificationDestination> {
+                    OtpVerificationScreen(onVerifyOtp = {
+                        navController.navigate(HomeScreenTabDestination)
+                    })
                 }
                 composable<HomeScreenTabDestination> {
                     HomeScreen(rootNavController = navController)
@@ -65,16 +76,16 @@ fun App() {
                 composable<CartDestination> {
                     CartScreen(onBack = {
                         onBackPress()
+                    }, onNavigatePayment = {
+                        navController.navigate(PaymentDestination)
                     })
                 }
 
-                composable<DetailDestination> { backStackEntry ->
-                    DetailScreen(
-                        objectId = backStackEntry.toRoute<DetailDestination>().objectId,
-                        navigateBack = {
-                            navController.popBackStack()
-                        }
-                    )
+
+                composable<PaymentDestination> {
+                    PaymentSuccessScreen(onHomeRedirect = {
+                        navController.popBackStack(HomeScreenTabDestination, inclusive = false)
+                    })
                 }
             }
         }

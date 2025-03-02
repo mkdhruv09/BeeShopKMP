@@ -37,7 +37,7 @@ kotlin {
             val rootDirPath = project.rootDir.path
             val projectDirPath = project.projectDir.path
             commonWebpackConfig {
-                outputFileName = "composeApp.js"
+                outputFileName = "beeshopapp.js"
                 devServer = (devServer ?: KotlinWebpackConfig.DevServer()).apply {
                     static = (static ?: mutableListOf()).apply {
                         // Serve sources to debug inside browser
@@ -80,6 +80,7 @@ kotlin {
             implementation(libs.koin.compose.viewmodel)
             implementation(libs.navigation.compose)
             implementation(libs.coil.compose.v304)
+            implementation("io.github.aakira:napier:2.7.1")
             //implementation(libs.androidx.compose.ui.icons)
             //implementation(libs.compose.shimmer)
         }

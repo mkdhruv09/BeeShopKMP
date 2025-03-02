@@ -8,11 +8,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ContextualFlowRow
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.FlowRowOverflow
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -23,13 +20,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.ShoppingCart
@@ -37,6 +33,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -45,9 +45,9 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil3.compose.rememberAsyncImagePainter
 import com.jetbrains.kmpapp.components.AppScreenScaffold
 import com.jetbrains.kmpapp.components.BORDER_WIDTH
 import com.jetbrains.kmpapp.components.GlideImage
@@ -65,35 +65,78 @@ fun DashboardTabScreen(
     onReelsClick: () -> Unit = {}
 ) {
     AppScreenScaffold(containerColor = Color.White) { paddingValues ->
-        Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-            SearchView(
-                text = "Search here",
-                modifier = Modifier.padding(12.dp)
-            )
-            HomeAdBanner()
+        val listState = rememberLazyListState()
+        val isScrolledToBottom by remember {
+            derivedStateOf {
+                val layoutInfo = listState.layoutInfo
+                val lastVisibleItem = layoutInfo.visibleItemsInfo.lastOrNull()
+                val totalItems = layoutInfo.totalItemsCount
 
-            Spacer(modifier = Modifier.height(12.dp))
+                if (lastVisibleItem != null) {
+                    // Check if the last item is fully visible
+                    lastVisibleItem.index == totalItems - 1 &&
+                            lastVisibleItem.offset + lastVisibleItem.size <= layoutInfo.viewportEndOffset
+                } else {
+                    false
+                }
+            }
+        }
 
-            HomeCategoryList(onCategoryClick = {
+        LaunchedEffect(isScrolledToBottom) {
+            if (isScrolledToBottom) {
+                println("Reached Bottom! ✅")
+            }
+        }
+        LazyColumn(state = listState) {
+            item {
+                SearchView(
+                    text = "Search here",
+                    modifier = Modifier.padding(12.dp)
+                )
+            }
+            item {
+                HomeAdBanner()
+                Spacer(modifier = Modifier.height(12.dp))
+            }
 
-            })
+            item {
+                HomeCategoryList(onCategoryClick = {
 
-            Spacer(modifier = Modifier.height(12.dp))
-            HomeProductHorizontal(title = "Today's Pick", onProductClick = {
-            })
+                })
+                Spacer(modifier = Modifier.height(12.dp))
+            }
 
-            Spacer(modifier = Modifier.height(12.dp))
-            HomeReels(onClick = {
-                onReelsClick()
-            })
 
-            Spacer(modifier = Modifier.height(12.dp))
-            UnderDeals()
+            item {
+                HomeProductHorizontal(title = "Today's Pick", onProductClick = {
+                    onProductDetail()
+                })
+                Spacer(modifier = Modifier.height(12.dp))
+            }
 
-            Spacer(modifier = Modifier.height(12.dp))
-            HomeProductVertical(onProductClick = {
-                onProductDetail()
-            })
+
+            item {
+                HomeReels(onClick = {
+                    onReelsClick()
+                })
+                Spacer(modifier = Modifier.height(12.dp))
+            }
+
+
+            item {
+                UnderDeals()
+                Spacer(modifier = Modifier.height(12.dp))
+            }
+
+            item {
+                BoxWithConstraints {
+                    HomeProductVertical(
+                        onProductClick = {
+                            onProductDetail()
+                        }, fullWidth = maxWidth
+                    )
+                }
+            }
         }
     }
 }
@@ -217,29 +260,27 @@ fun HomeProductHorizontal(title: String = "", onProductClick: () -> Unit = {}) {
 //@ShowkaseComposable("HomeProductsVertical", group = "HomeWidgets")
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun HomeProductVertical(onProductClick: () -> Unit = {}) {
-    Column(modifier = Modifier.fillMaxWidth()) {
+fun HomeProductVertical(fullWidth: Dp, onProductClick: () -> Unit = {}) {
+    val divideRatio = if (fullWidth > 450.dp) 5 else 2
+    FlowRow(
+        modifier = Modifier.fillMaxWidth(),
+        maxItemsInEachRow = divideRatio,
+        horizontalArrangement = Arrangement.spacedBy(10.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp)
+    ) {
         ListHeader("Popular Products")
-
-        val rows = 2
-        val columns = 3
-        FlowRow(
-            modifier = Modifier.padding(4.dp),
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
-            maxItemsInEachRow = rows
-        ) {
-            val itemModifier = Modifier
-                .size(100.dp)
-                .clip(RoundedCornerShape(8.dp))
-                .background(Color.Black)
-            repeat(rows * columns) {
-                Box(modifier = itemModifier) {
-                    HomeProduct(
-                        url = Product.SAMPLE_IMAGE,
-                        modifier = Modifier.matchParentSize()
-                    )
-                }
-            }
+        val itemWidth = fullWidth / divideRatio - 10.dp
+        val itemModifier = Modifier
+            .width(itemWidth)
+            .aspectRatio(1f)
+            .clip(RoundedCornerShape(8.dp))
+            .background(Color.Black)
+        repeat(10) {
+            HomeProduct(
+                url = Product.SAMPLE_IMAGE,
+                modifier = itemModifier,
+                onProductClick = onProductClick
+            )
         }
     }
 }
@@ -298,7 +339,11 @@ fun HomeProduct(
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.bodyMedium
             )
-            Text(text = "20% Off", color = Color.Red, style = MaterialTheme.typography.bodyMedium)
+            Text(
+                text = "20% Off",
+                color = Color.Red,
+                style = MaterialTheme.typography.bodyMedium
+            )
         }
     }
 }

@@ -36,6 +36,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 @Preview
 fun OtpVerificationScreen(
+    onVerifyOtp: () -> Unit = {}
 ) {
     BeeShopTheme {
         val context = LocalPlatformContext.current
@@ -106,6 +107,7 @@ fun OtpVerificationScreen(
                         .fillMaxWidth()
                         .padding(SCREEN_PADDING),
                     onClick = {
+                        onVerifyOtp()
                     })
             }
         }
